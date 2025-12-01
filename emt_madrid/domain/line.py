@@ -18,6 +18,7 @@ class Line:
     day_type: Optional[DayType] = None
     arrival: Optional[int] = None
     next_arrival: Optional[int] = None
+    bus_coords: Optional[list[float]] = None 
 
     def __str__(self) -> str:
         """Return a string representation of the line."""
