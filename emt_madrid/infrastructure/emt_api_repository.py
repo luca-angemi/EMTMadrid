@@ -217,6 +217,7 @@ class EMTAPIRepository(EMTRepository):
             for arrival in arrivals_data:
                 try:
                     line_number = str(arrival["line"])
+                    coords = arrival["geometry"]["coordinates"]
                     if line_number not in line_arrivals:
                         line_arrivals[line_number] = []
                     line_arrivals[line_number].append(
@@ -233,11 +234,21 @@ class EMTAPIRepository(EMTRepository):
                 if not sorted_arrivals:
                     line.arrival = None
                     line.next_arrival = None
+                    line.bus_coords = None
                 else:
                     line.arrival = sorted_arrivals[0]
                     line.next_arrival = (
                         sorted_arrivals[1] if len(sorted_arrivals) > 1 else None
                     )
+
+                bus_for_line = [
+                    a for a in arrivals_data if str(a["line"]) == line.line_number
+                ]
+                if bus_for_line:
+                    first_bus = min(bus_for_line, key=lambda x: int(x["estimateArrive"]))
+                    line.bus_coords = first_bus["geometry"]["coordinates"]
+                else:
+                    line.bus_coords = None
 
             return stop
 
