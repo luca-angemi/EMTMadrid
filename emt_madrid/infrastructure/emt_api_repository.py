@@ -217,7 +217,6 @@ class EMTAPIRepository(EMTRepository):
             for arrival in arrivals_data:
                 try:
                     line_number = str(arrival["line"])
-                    coords = arrival["geometry"]["coordinates"]
                     if line_number not in line_arrivals:
                         line_arrivals[line_number] = []
                     line_arrivals[line_number].append(
